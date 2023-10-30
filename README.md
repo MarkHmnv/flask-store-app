@@ -1,1 +1,1 @@
-# flask-store-app
+# Store REST API
