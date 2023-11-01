@@ -1,6 +1,7 @@
 from sqlite3 import IntegrityError
 
 from flask.views import MethodView
+from flask_jwt_extended import jwt_required
 from flask_smorest import Blueprint, abort
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -18,6 +19,7 @@ class StoreListView(MethodView):
     def get(self):
         return StoreModel.query.all()
 
+    @jwt_required(fresh=True)
     @blp.arguments(StoreSchema)
     @blp.response(201, StoreSchema)
     def post(self, data):
@@ -33,16 +35,18 @@ class StoreListView(MethodView):
         return store
 
 
-@blp.route('/stores/<string:id>')
+@blp.route('/stores/<int:id>')
 class StoreView(MethodView):
     @blp.response(200, StoreSchema)
     def get(self, id):
         store = StoreModel.query.get_or_404(id)
         return store
 
+    @jwt_required(fresh=True)
+    @blp.response(204)
     def delete(self, id):
         store = StoreModel.query.get_or_404(id)
         db.session.delete(store)
         db.session.commit()
-        return '', 204
+        return ''
 
