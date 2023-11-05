@@ -4,7 +4,7 @@ from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from flask_jwt_extended import create_access_token, get_jwt, jwt_required, get_jwt_identity
 
-from ..jwt.blacklist import BLACKLIST
+from ..blacklist import BLACKLIST
 from ..db import db
 from ..models import UserModel
 from ..schemas import UserSchema
